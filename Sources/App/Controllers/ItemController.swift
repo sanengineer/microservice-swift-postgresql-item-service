@@ -26,7 +26,7 @@ struct ItemController: RouteCollection {
         return item.save(on: req.db).map { item }
     }
 
-    func getHandlerByUserId(_ req: Request) -> EventLoopFuture<[Item]> {
+    func getHandlerByUserId(_ req: Request) throws -> EventLoopFuture<[Item]> {
         let user_id = req.parameters.get("user_id", as: UUID.self)
 
         return Item.find(user_id, on: req.db)
@@ -36,7 +36,7 @@ struct ItemController: RouteCollection {
                 }
     }
 
-    func getHandler(_ req: Request) -> EventLoopFuture<Item> {
+    func getHandler(_ req: Request) throws -> EventLoopFuture<Item> {
         let item_id = req.parameters.get("item_id", as: UUID.self)
 
         return Item.find(item_id, on: req.db)
