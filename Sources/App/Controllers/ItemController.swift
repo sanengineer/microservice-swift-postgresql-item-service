@@ -14,7 +14,7 @@ struct ItemController: RouteCollection {
         itemAuthUser.post(use: createHandler)   
         // itemAuthUser.get(":user_id", use: getHandlerByUserId)
         itemAuthUser.get(":item_id", use: getHandler)
-        // itemAuthUser.put(":item_id", use: updateHandler)
+        itemAuthUser.put(":item_id", use: updateHandler)
     }
 
     func getAllHandler(_ req: Request) throws -> EventLoopFuture<[Item]> {
@@ -39,18 +39,18 @@ struct ItemController: RouteCollection {
                 .unwrap(or: Abort(.notFound))
     }
 
-    // func updateHandler(_ req: Request) throws -> EventLoopFuture<Item> {
-    //     let itemUpdate = try req.content.decode(ItemUpdate.self)
+    func updateHandler(_ req: Request) throws -> EventLoopFuture<Item> {
+        let itemUpdate = try req.content.decode(ItemUpdate.self)
 
-    //     return Item.find(req.parameters.get("item_id"), on: req.db)
-    //             .unwrap(or: Abort(.notFound))
-    //             .flatMap { item in
-    //                 item.cart_id = itemUpdate.cart_id ?? item.cart_id
-    //                 item.product_id = itemUpdate.product_id ?? item.product_id
-    //                 item.topping_id = itemUpdate.topping_id ?? item.topping_id
-    //                 item.varian_id = itemUpdate.varian_id ?? item.varian_id
-    //                 item.user_id = itemUpdate.user_id ?? item.user_id
-    //                 return item.update(on: req.db).map { item }
-    //             }
-    // }
+        return Item.find(req.parameters.get("item_id"), on: req.db)
+                .unwrap(or: Abort(.notFound))
+                .flatMap { item in
+                    item.cart_id = itemUpdate.cart_id ?? item.cart_id
+                    item.product_id = itemUpdate.product_id ?? item.product_id
+                    item.topping_id = itemUpdate.topping_id ?? item.topping_id
+                    item.varian_id = itemUpdate.varian_id ?? item.varian_id
+                    item.user_id = itemUpdate.user_id ?? item.user_id
+                    return item.update(on: req.db).map { item }
+                }
+    }
 }
