@@ -8,6 +8,7 @@ struct CreateSchemaItem: Migration {
             .field("topping_id", .uuid, .required)
             .field("product_id", .uuid, .required)
             .field("varian_id", .uuid, .required)
+            .field("user_id", .uuid, .required)
             .field("created_at", .datetime)
             .field("updated_at", .datetime)
             .unique(on: "varian_id")
