@@ -27,9 +27,7 @@ struct ItemController: RouteCollection {
     }
 
     func getHandlerByUserId(_ req: Request) throws -> EventLoopFuture<[Item]> {
-        let user_id = req.parameters.get("user_id", as: UUID.self)
-
-        return Item.find(user_id, on: req.db)
+        return Item.find(req.parameters.get("item_id"), on: req.db)
                 .unwrap(or: Abort(.notFound))
                 .map{ item in
                     return [Item(id: item.id, cart_id: item.cart_id, product_id: item.product_id, topping_id: item.topping_id, varian_id: item.varian_id, user_id: item.user_id)]
@@ -37,17 +35,14 @@ struct ItemController: RouteCollection {
     }
 
     func getHandler(_ req: Request) throws -> EventLoopFuture<Item> {
-        let item_id = req.parameters.get("item_id", as: UUID.self)
-
-        return Item.find(item_id, on: req.db)
+        return Item.find(req.parameters.get("item_id"), on: req.db)
                 .unwrap(or: Abort(.notFound))
     }
 
     func updateHandler(_ req: Request) throws -> EventLoopFuture<Item> {
-        let item_id = req.parameters.get("item_id", as: UUID.self)
         let itemUpdate = try req.content.decode(ItemUpdate.self)
 
-        return Item.find(item_id, on: req.db)
+        return Item.find(req.parameters.get("item_id"), on: req.db)
                 .unwrap(or: Abort(.notFound))
                 .flatMap { item in
                     item.cart_id = itemUpdate.cart_id ?? item.cart_id
