@@ -7,5 +7,5 @@ func routes(_ app: Application) throws {
         return "Hello To Item API Services"
     }
     
-    // try app.register(collection: ItemController() )
+    try app.register(collection: ItemController())
 }
