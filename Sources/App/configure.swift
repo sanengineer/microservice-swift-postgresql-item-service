@@ -54,14 +54,13 @@ public func configure(_ app: Application) throws {
     app.middleware.use(cors)
     app.middleware.use(routeLogging)
     app.middleware.use(error)
-    
+
     app.logger.logLevel = .debug
 
     app.migrations.add(CreateSchemaItem())
 
-    //migration_for_first_deployment
-    try app.autoMigrate().wait()
+    // migration db
+    // try app.autoMigrate().wait()
 
-    // register routes
     try routes(app)
 }
