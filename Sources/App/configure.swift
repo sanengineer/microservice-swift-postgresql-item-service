@@ -6,8 +6,6 @@ import FluentPostgresDriver
 // configures your application
 public func configure(_ app: Application) throws {
     
-    let port: Int
-
     if let dbUrlEnv = Environment.get("DATABASE_URL"), var postgresConfig = PostgresConfiguration(url: dbUrlEnv) {
         postgresConfig.tlsConfiguration = .makeClientConfiguration()
         postgresConfig.tlsConfiguration?.certificateVerification = .none
@@ -15,6 +13,8 @@ public func configure(_ app: Application) throws {
             configuration: postgresConfig
         ), as: .psql)
     } else {
+        let port: Int
+
         guard let serverHostname = Environment.get("SERVER_HOSTNAME") else {
             return print("No Env Server Hostname")
         }
