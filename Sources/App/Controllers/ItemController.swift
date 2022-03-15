@@ -13,7 +13,7 @@ struct ItemController: RouteCollection {
 
         itemAuthUser.post(use: createHandler)   
         // itemAuthUser.get(":user_id", use: getHandlerByUserId)
-        // itemAuthUser.get(":item_id", use: getHandler)
+        itemAuthUser.get(":item_id", use: getHandler)
         // itemAuthUser.put(":item_id", use: updateHandler)
     }
 
@@ -34,10 +34,10 @@ struct ItemController: RouteCollection {
     //             }
     // }
 
-    // func getHandler(_ req: Request) throws -> EventLoopFuture<Item> {
-    //     return Item.find(req.parameters.get("item_id"), on: req.db)
-    //             .unwrap(or: Abort(.notFound))
-    // }
+    func getHandler(_ req: Request) throws -> EventLoopFuture<Item> {
+        return Item.find(req.parameters.get("item_id"), on: req.db)
+                .unwrap(or: Abort(.notFound))
+    }
 
     // func updateHandler(_ req: Request) throws -> EventLoopFuture<Item> {
     //     let itemUpdate = try req.content.decode(ItemUpdate.self)
